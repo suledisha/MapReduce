@@ -3,7 +3,7 @@
 # Customize these paths for your environment.
 # -----------------------------------------------------------
 hadoop.root=/home/disha/Documents/CS6240/hadoop-2.9.1
-jar.name=mapreduce-1.0.jar
+jar.name=MapReduce-1.0-SNAPSHOT.jar
 jar.path=target/${jar.name}
 job.name=twitter.FollowersCount
 local.input=input
@@ -15,13 +15,13 @@ hdfs.output=output
 # AWS EMR Execution
 aws.emr.release=emr-5.17.0
 aws.region=us-east-1
-aws.bucket.name=mr-hw1-bucket2
-aws.subnet.id=subnet-6356553a
+aws.bucket.name=mr-hw1-edges
+aws.subnet.id=subnet-28ad2e74
 aws.input=input
-aws.output=output
-aws.log.dir=log
-aws.num.nodes=1
-aws.instance.type=m3.xlarge
+aws.output=output-3
+aws.log.dir=log-3
+aws.num.nodes=10
+aws.instance.type=m4.large
 # -----------------------------------------------------------
 
 # Compiles code and builds jar (with dependencies).
@@ -110,7 +110,7 @@ upload-app-aws:
 # Main EMR launch.
 aws: jar upload-app-aws delete-output-aws
 	aws emr create-cluster \
-		--name "WordCount MR Cluster" \
+		--name "Twitter Followers MR Cluster 3" \
 		--release-label ${aws.emr.release} \
 		--instance-groups '[{"InstanceCount":${aws.num.nodes},"InstanceGroupType":"CORE","InstanceType":"${aws.instance.type}"},{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"${aws.instance.type}"}]' \
 	    --applications Name=Hadoop \
@@ -118,7 +118,8 @@ aws: jar upload-app-aws delete-output-aws
 		--log-uri s3://${aws.bucket.name}/${aws.log.dir} \
 		--use-default-roles \
 		--enable-debugging \
-		--auto-terminate
+		--auto-terminate \
+		--ec2-attributes SubnetId=${aws.subnet.id}
 
 # Download output from S3.
 download-output-aws: clean-local-output

@@ -44,4 +44,4 @@ All of the build & execution commands are organized in the Makefile.
 7) AWS EMR Hadoop: (you must configure the emr.* config parameters at top of Makefile)
 	make upload-input-aws		-- only before first execution
 	make aws					-- check for successful execution with web interface (aws.amazon.com)
-	download-output-aws			-- after successful execution & termination
+	make download-output-aws			-- after successful execution & termination
